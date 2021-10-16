@@ -1,0 +1,113 @@
+USE [AG_d]
+GO
+/****** Object:  Table [dbo].[mobile_otp_details]    Script Date: 10/16/2021 11:40:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mobile_otp_details](
+	[otp_id] [bigint] IDENTITY(1,1) NOT NULL,
+	[mobile] [varchar](15) NULL,
+	[str_otp] [varchar](10) NULL,
+	[str_transaction_code] [varchar](100) NULL,
+	[otp_created_date] [datetime] NULL,
+	[otp_counter] [int] NULL,
+ CONSTRAINT [PK_mobile_otp_details] PRIMARY KEY CLUSTERED 
+(
+	[otp_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[user_address_details]    Script Date: 10/16/2021 11:40:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[user_address_details](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[UserDetailsId] [bigint] NOT NULL,
+	[name] [varchar](50) NULL,
+	[is_billing_address] [bit] NOT NULL,
+	[is_same_as_postal_add] [bit] NOT NULL,
+	[country] [varchar](50) NULL,
+	[address_line_1] [varchar](500) NULL,
+	[address_line_2] [varchar](500) NULL,
+	[state] [varchar](50) NULL,
+	[postal_code] [varchar](10) NULL,
+	[city] [varchar](50) NULL,
+	[created_date] [datetime2](7) NULL,
+	[is_active] [bit] NULL,
+	[additionAddId] [int] NOT NULL,
+ CONSTRAINT [PK_user_profile_details] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[user_details]    Script Date: 10/16/2021 11:40:36 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[user_details](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[first_name] [varchar](50) NULL,
+	[last_name] [varchar](50) NULL,
+	[nick_name] [varchar](50) NULL,
+	[email] [varchar](100) NULL,
+	[country_code] [varchar](20) NULL,
+	[mobile] [varchar](15) NULL,
+	[password] [varchar](100) NULL,
+	[is_otp_verified] [bit] NULL,
+	[register_from] [varchar](20) NULL,
+	[is_profile_update] [bit] NULL,
+	[gender] [varchar](20) NULL,
+	[dob] [varchar](50) NULL,
+	[hear_aboutus] [varchar](100) NULL,
+	[interested_in] [varchar](100) NULL,
+	[interested_in_bidding] [varchar](10) NULL,
+	[gst_no] [varchar](50) NULL,
+	[device_code] [varchar](500) NULL,
+	[last_login_date] [datetime2](7) NULL,
+	[profile_update_date] [datetime2](7) NULL,
+	[registration_date] [datetime2](7) NULL,
+	[user_ip] [varchar](50) NULL,
+	[is_active] [bit] NULL,
+	[user_agent] [varchar](100) NULL,
+	[bank_name] [varchar](150) NULL,
+	[account_num] [varchar](150) NULL,
+	[ifsc_code] [varchar](100) NULL,
+	[pan_card] [varchar](max) NULL,
+	[aadhar_card] [varchar](max) NULL,
+	[birthDay] [int] NULL,
+	[birthMonth] [int] NULL,
+	[birthYear] [int] NULL,
+ CONSTRAINT [PK_user_details] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[user_address_details] ADD  CONSTRAINT [DF_user_profile_details_is_billing_address]  DEFAULT ((0)) FOR [is_billing_address]
+GO
+ALTER TABLE [dbo].[user_address_details] ADD  CONSTRAINT [DF_user_address_details_is_same_as_postal_add]  DEFAULT ((0)) FOR [is_same_as_postal_add]
+GO
+ALTER TABLE [dbo].[user_address_details] ADD  CONSTRAINT [DF_user_profile_details_created_date]  DEFAULT (getdate()) FOR [created_date]
+GO
+ALTER TABLE [dbo].[user_address_details] ADD  CONSTRAINT [DF_user_profile_details_is_active]  DEFAULT ((1)) FOR [is_active]
+GO
+ALTER TABLE [dbo].[user_address_details] ADD  CONSTRAINT [DF_user_address_details_additionAddId]  DEFAULT ((0)) FOR [additionAddId]
+GO
+ALTER TABLE [dbo].[user_details] ADD  CONSTRAINT [DF_user_details_is_otp_verified]  DEFAULT ((0)) FOR [is_otp_verified]
+GO
+ALTER TABLE [dbo].[user_details] ADD  CONSTRAINT [DF_user_details_is_profile_update]  DEFAULT ((0)) FOR [is_profile_update]
+GO
+ALTER TABLE [dbo].[user_details] ADD  CONSTRAINT [DF_Table_1_created_date]  DEFAULT (getdate()) FOR [registration_date]
+GO
+ALTER TABLE [dbo].[user_details] ADD  CONSTRAINT [DF_user_details_is_active]  DEFAULT ((1)) FOR [is_active]
+GO
+ALTER TABLE [dbo].[user_address_details]  WITH CHECK ADD  CONSTRAINT [FK_user_address_details_user_details] FOREIGN KEY([UserDetailsId])
+REFERENCES [dbo].[user_details] ([Id])
+GO
+ALTER TABLE [dbo].[user_address_details] CHECK CONSTRAINT [FK_user_address_details_user_details]
+GO
